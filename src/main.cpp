@@ -128,6 +128,42 @@ struct GameCtx
   bool running;
 };
 
+void menuItemClicked(struct Menu *menu, unsigned long index, void *userData)
+{
+  const char *label = (const char *)menu->menuItemLabels[index];
+  std::cout << "clicked on " << label << " menu item" << std::endl;
+  switch (index)
+  {
+  case 0:
+  {
+    std::cout << "TODO: Start New Game" << std::endl;
+  }
+  break;
+  case 1:
+  {
+    std::cout << "TODO: Load Saved Game" << std::endl;
+  }
+  break;
+  case 2:
+  {
+    std::cout << "TODO: Push Options Screen" << std::endl;
+  }
+  break;
+  case 3:
+  {
+    std::cout << "Quit Game" << std::endl;
+    struct GameCtx *ctx = (struct GameCtx *)userData;
+    if (ctx)
+    {
+      ctx->running = false;
+    }
+  }
+  break;
+  default:
+    break;
+  }
+}
+
 int main(int argc, char *argv[])
 {
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -171,6 +207,10 @@ int main(int argc, char *argv[])
   addMenuItem(menu, "Options", SCREEN_WIDTH * 0.6, SCREEN_HEIGHT / 8);
   addMenuItem(menu, "Quit Game", SCREEN_WIDTH * 0.6, SCREEN_HEIGHT / 8);
 
+  setMenuItemClickedCallback(menu, 0, menuItemClicked);
+  setMenuItemClickedCallback(menu, 1, menuItemClicked);
+  setMenuItemClickedCallback(menu, 2, menuItemClicked);
+  setMenuItemClickedCallback(menu, 3, menuItemClicked);
 
   for (unsigned long i = 0; i < menu->size; i++)
   {
@@ -258,6 +298,21 @@ int main(int argc, char *argv[])
       {
         // unset the menu hover state
         menu->menuItemStates[i] &= ~MENU_HOVER_STATE;
+      }
+    }
+
+    // if we did click and there is a selected menu item
+    if (didClick && menu->selectedItem != 0)
+    {
+      // remember that the select item is the index plus one
+      // so we must subtract one to get the array index
+      unsigned long index = menu->selectedItem - 1;
+      // if there is a clicked callback set for the menu item
+      if (menu->menuItemCallbacks[index].clicked)
+      {
+        // call the menu item clicked callback function
+        // note that we pass a void pointer to the game context
+        menu->menuItemCallbacks[index].clicked(menu, index, (void *)&ctx);
       }
     }
 
