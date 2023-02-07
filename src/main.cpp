@@ -15,6 +15,12 @@ constexpr int WINDOW_HEIGHT = 1080;
 constexpr int SCREEN_WIDTH = 640;
 constexpr int SCREEN_HEIGHT = 360;
 
+
+struct GameCtx
+{
+  bool running;
+};
+
 int main(int argc, char *argv[])
 {
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -47,24 +53,28 @@ int main(int argc, char *argv[])
 
   SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-  bool running = true;
+  struct GameCtx ctx;
+  ctx.running = true;
   SDL_Event event;
 
-  while (running)
+
+  while (ctx.running)
   {
     while (SDL_PollEvent(&event))
     {
       if (event.type == SDL_QUIT)
       {
-        running = false;
+        ctx.running = false;
       }
       else if (event.type == SDL_KEYDOWN)
       {
         if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
         {
-          running = false;
+          ctx.running = false;
         }
       }
+    }
+
     }
     SDL_SetRenderDrawColor(renderer, 0x30, 0x60, 0x90, 0xFF);
     SDL_RenderClear(renderer);
