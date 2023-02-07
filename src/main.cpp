@@ -42,6 +42,18 @@ struct Menu
   unsigned long selectedItem;
 };
 
+struct Menu *createMenu()
+{
+  struct Menu *menu = (struct Menu *)malloc(sizeof(struct Menu));
+  menu->size = 0;
+  menu->selectedItem = 0;
+  menu->menuItemLabels = 0;
+  menu->menuItemRects = 0;
+  menu->menuItemStates = 0;
+  menu->menuItemCallbacks = 0;
+  return menu;
+};
+
 
 struct GameCtx
 {
