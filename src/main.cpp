@@ -189,6 +189,8 @@ int main(int argc, char *argv[])
   }
 
   SDL_Color menuItemLabelColor{255, 255, 255, 255};
+  SDL_Color hoverMenuItemLabelColor{255, 255, 0, 255};
+  SDL_Color selectedMenuItemLabelColor{0, 255, 255, 255};
 
   bool wasMouseDown = false;
 
@@ -234,13 +236,50 @@ int main(int argc, char *argv[])
       didClick = true;
     }
 
+    // update the menu state
+    menu->selectedItem = 0;
+    for (unsigned long i = 0; i < menu->size; i++)
+    {
+      SDL_Rect rect{
+          (int)menu->menuItemRects[i * 4 + 0],
+          (int)menu->menuItemRects[i * 4 + 1],
+          (int)menu->menuItemRects[i * 4 + 2],
+          (int)menu->menuItemRects[i * 4 + 3]};
+      bool isHovered = (mouseX > rect.x && mouseY > rect.y && mouseX < rect.x + rect.w && mouseY < rect.y + rect.h);
+
+      if (isHovered)
+      {
+        // when we hover, we "select" the menu item and set the hover state
+        menu->menuItemStates[i] |= MENU_HOVER_STATE;
+        // remember that the select item is the index plus one
+        menu->selectedItem = i + 1;
+      }
+      else
+      {
+        // unset the menu hover state
+        menu->menuItemStates[i] &= ~MENU_HOVER_STATE;
+      }
+    }
+
     SDL_SetRenderDrawColor(renderer, 0x30, 0x60, 0x90, 0xFF);
     SDL_RenderClear(renderer);
 
     // render the menu
     for (unsigned long i = 0; i < menu->size; i++)
     {
+      bool isSelected = menu->selectedItem == i + 1;
+      bool isHovered = menu->menuItemStates[i] & MENU_HOVER_STATE;
+
+      // determine the colors by the selected and hover state
       SDL_Color *labelColor = &menuItemLabelColor;
+      if (isHovered)
+      {
+        labelColor = &hoverMenuItemLabelColor;
+        if (isMouseDown && isSelected)
+        {
+          labelColor = &selectedMenuItemLabelColor;
+        }
+      }
       const char *label = (const char *)menu->menuItemLabels[i];
       SDL_Surface *labelSurface = TTF_RenderUTF8_Blended(font, label, *labelColor);
       SDL_Texture *labelTexture = SDL_CreateTextureFromSurface(renderer, labelSurface);
