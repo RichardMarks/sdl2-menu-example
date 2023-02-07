@@ -172,6 +172,20 @@ int main(int argc, char *argv[])
   addMenuItem(menu, "Quit Game", SCREEN_WIDTH * 0.6, SCREEN_HEIGHT / 8);
 
 
+  for (unsigned long i = 0; i < menu->size; i++)
+  {
+
+    std::cout
+        << "[" << i << "] "
+        << menu->menuItemLabels[i] << " {"
+        << menu->menuItemRects[i * 4 + 0] << ", "
+        << menu->menuItemRects[i * 4 + 1] << ", "
+        << menu->menuItemRects[i * 4 + 2] << ", "
+        << menu->menuItemRects[i * 4 + 3] << "} ("
+        << std::to_string(menu->menuItemStates[i]) << ")" << std::endl;
+  }
+
+
   while (ctx.running)
   {
     while (SDL_PollEvent(&event))
