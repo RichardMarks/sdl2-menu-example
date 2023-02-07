@@ -79,6 +79,13 @@ void addMenuItem(struct Menu *menu, const char *label, float width, float height
   }
 }
 
+void setMenuItemClickedCallback(struct Menu *menu, unsigned long index, MenuItemClickedCallback clicked)
+{
+  if (menu && index < menu->size && menu->menuItemCallbacks)
+  {
+    menu->menuItemCallbacks[index].clicked = clicked;
+  }
+}
 
 void destroyMenu(struct Menu *menu)
 {
