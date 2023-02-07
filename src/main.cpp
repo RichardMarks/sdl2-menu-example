@@ -55,6 +55,42 @@ struct Menu *createMenu()
 };
 
 
+void destroyMenu(struct Menu *menu)
+{
+  if (menu->size)
+  {
+    if (menu->menuItemLabels)
+    {
+      for (unsigned long i = 0; i < menu->size; i++)
+      {
+        if (menu->menuItemLabels[i])
+        {
+          free(menu->menuItemLabels[i]);
+        }
+      }
+      free(menu->menuItemLabels);
+      menu->menuItemLabels = 0;
+    }
+    if (menu->menuItemStates)
+    {
+      free(menu->menuItemStates);
+      menu->menuItemStates = 0;
+    }
+    if (menu->menuItemRects)
+    {
+      free(menu->menuItemRects);
+      menu->menuItemRects = 0;
+    }
+    if (menu->menuItemCallbacks)
+    {
+      free(menu->menuItemCallbacks);
+      menu->menuItemCallbacks = 0;
+    }
+    menu->size = 0;
+    menu->selectedItem = 0;
+  }
+}
+
 struct GameCtx
 {
   bool running;
