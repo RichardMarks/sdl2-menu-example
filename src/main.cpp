@@ -19,6 +19,29 @@ constexpr unsigned char MENU_NORMAL_STATE = 0;
 constexpr unsigned char MENU_HOVER_STATE = 1;
 constexpr unsigned char MENU_DEFAULT_STATE = MENU_NORMAL_STATE;
 
+struct Menu;
+typedef void (*MenuItemClickedCallback)(struct Menu *menu, unsigned long index, void *userData);
+struct MenuItemCallbacks
+{
+  MenuItemClickedCallback clicked;
+};
+
+struct Menu
+{
+  // array of label strings
+  char **menuItemLabels;
+  // array of state bitmasks
+  unsigned char *menuItemStates;
+  // array of x,y,w,h rects
+  float *menuItemRects;
+  // array of callbacks structure
+  struct MenuItemCallbacks *menuItemCallbacks;
+  // the number of menu items in the menu
+  unsigned long size;
+  // 0 - no selection, 1 - first selected (one-indexing logic)
+  unsigned long selectedItem;
+};
+
 
 struct GameCtx
 {
