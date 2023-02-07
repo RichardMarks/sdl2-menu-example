@@ -54,6 +54,31 @@ struct Menu *createMenu()
   return menu;
 };
 
+void addMenuItem(struct Menu *menu, const char *label, float width, float height)
+{
+  if (menu)
+  {
+    // add a label
+    menu->menuItemLabels = (char **)realloc(menu->menuItemLabels, sizeof(char *) * menu->size + 1);
+    menu->menuItemLabels[menu->size] = (char *)malloc(sizeof(char) * strlen(label));
+    strcpy(menu->menuItemLabels[menu->size], label);
+    // add a rect
+    menu->menuItemRects = (float *)realloc(menu->menuItemRects, sizeof(float) * ((menu->size + 1) * 4));
+    menu->menuItemRects[(menu->size * 4) + 0] = 0.0f;
+    menu->menuItemRects[(menu->size * 4) + 1] = 0.0f;
+    menu->menuItemRects[(menu->size * 4) + 2] = width;
+    menu->menuItemRects[(menu->size * 4) + 3] = height;
+    // add a state
+    menu->menuItemStates = (unsigned char *)realloc(menu->menuItemStates, sizeof(unsigned char) * (menu->size + 1));
+    menu->menuItemStates[menu->size] = MENU_DEFAULT_STATE;
+    // add callbacks
+    menu->menuItemCallbacks = (struct MenuItemCallbacks *)realloc(menu->menuItemCallbacks, sizeof(struct MenuItemCallbacks) * (menu->size + 1));
+    menu->menuItemCallbacks[menu->size].clicked = 0;
+    // increment the size
+    menu->size++;
+  }
+}
+
 
 void destroyMenu(struct Menu *menu)
 {
