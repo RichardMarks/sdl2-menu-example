@@ -164,6 +164,13 @@ int main(int argc, char *argv[])
   ctx.running = true;
   SDL_Event event;
 
+  struct Menu *menu = createMenu();
+
+  addMenuItem(menu, "New Game", SCREEN_WIDTH * 0.6, SCREEN_HEIGHT / 8);
+  addMenuItem(menu, "Load Game", SCREEN_WIDTH * 0.6, SCREEN_HEIGHT / 8);
+  addMenuItem(menu, "Options", SCREEN_WIDTH * 0.6, SCREEN_HEIGHT / 8);
+  addMenuItem(menu, "Quit Game", SCREEN_WIDTH * 0.6, SCREEN_HEIGHT / 8);
+
 
   while (ctx.running)
   {
@@ -188,6 +195,7 @@ int main(int argc, char *argv[])
     SDL_RenderPresent(renderer);
   }
 
+  destroyMenu(menu);
 
   TTF_CloseFont(font);
 
