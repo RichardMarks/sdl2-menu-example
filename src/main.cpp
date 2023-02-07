@@ -207,6 +207,19 @@ int main(int argc, char *argv[])
       }
     }
 
+    // get the mouse state - note that the mouse coordinates are unscaled
+    int unscaledMouseX = 0;
+    int unscaledMouseY = 0;
+    Uint32 mouseState = SDL_GetMouseState(&unscaledMouseX, &unscaledMouseY);
+
+    // since we are using a logical size, we must transform the mouse coordinates
+    float mouseX = 0.0f;
+    float mouseY = 0.0f;
+    SDL_RenderWindowToLogical(renderer, unscaledMouseX, unscaledMouseY, &mouseX, &mouseY);
+
+    // if the left mouse button is pressed this frame
+    bool isMouseDown = mouseState & SDL_BUTTON(SDL_BUTTON_LEFT);
+
     }
     SDL_SetRenderDrawColor(renderer, 0x30, 0x60, 0x90, 0xFF);
     SDL_RenderClear(renderer);
