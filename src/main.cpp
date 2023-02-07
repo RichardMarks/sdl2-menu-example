@@ -15,6 +15,10 @@ constexpr int WINDOW_HEIGHT = 1080;
 constexpr int SCREEN_WIDTH = 640;
 constexpr int SCREEN_HEIGHT = 360;
 
+constexpr unsigned char MENU_NORMAL_STATE = 0;
+constexpr unsigned char MENU_HOVER_STATE = 1;
+constexpr unsigned char MENU_DEFAULT_STATE = MENU_NORMAL_STATE;
+
 
 struct GameCtx
 {
