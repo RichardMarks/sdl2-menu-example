@@ -1,6 +1,6 @@
 .DS_Store
 .vscode
-bin/
+bin/*
 *.o
 .sconsign.dblite
 !bin/*.ttf
