@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <iostream>
 #include <sstream>
@@ -33,6 +34,17 @@ int main(int argc, char *argv[])
     throw std::runtime_error("Unable to create renderer: " + std::string(SDL_GetError()));
   }
 
+  if (TTF_Init() != 0)
+  {
+    throw std::runtime_error("Unable to init SDL TTF: " + std::string(TTF_GetError()));
+  }
+
+  TTF_Font *font = TTF_OpenFont("KenneyFuture.ttf", SCREEN_HEIGHT / 20);
+  if (!font)
+  {
+    throw std::runtime_error("Unable to load font: " + std::string(TTF_GetError()));
+  }
+
   SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
   bool running = true;
@@ -58,6 +70,9 @@ int main(int argc, char *argv[])
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
   }
+
+
+  TTF_CloseFont(font);
 
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
