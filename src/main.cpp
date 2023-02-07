@@ -190,6 +190,8 @@ int main(int argc, char *argv[])
 
   SDL_Color menuItemLabelColor{255, 255, 255, 255};
 
+  bool wasMouseDown = false;
+
   while (ctx.running)
   {
     while (SDL_PollEvent(&event))
@@ -220,7 +222,18 @@ int main(int argc, char *argv[])
     // if the left mouse button is pressed this frame
     bool isMouseDown = mouseState & SDL_BUTTON(SDL_BUTTON_LEFT);
 
+    // didClick is our per-frame mouse-pressed-and-released event state
+    bool didClick = false;
+    if (isMouseDown && !wasMouseDown)
+    {
+      wasMouseDown = true;
     }
+    else if (!isMouseDown && wasMouseDown)
+    {
+      wasMouseDown = false;
+      didClick = true;
+    }
+
     SDL_SetRenderDrawColor(renderer, 0x30, 0x60, 0x90, 0xFF);
     SDL_RenderClear(renderer);
 
