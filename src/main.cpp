@@ -274,12 +274,19 @@ int main(int argc, char *argv[])
       SDL_Color *labelColor = &menuItemLabelColor;
       if (isHovered)
       {
+        SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x60, 0xFF);
         labelColor = &hoverMenuItemLabelColor;
         if (isMouseDown && isSelected)
         {
+          SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x90, 0xFF);
           labelColor = &selectedMenuItemLabelColor;
         }
       }
+      else
+      {
+        SDL_SetRenderDrawColor(renderer, 0x30, 0x30, 0x30, 0xFF);
+      }
+
       const char *label = (const char *)menu->menuItemLabels[i];
       SDL_Surface *labelSurface = TTF_RenderUTF8_Blended(font, label, *labelColor);
       SDL_Texture *labelTexture = SDL_CreateTextureFromSurface(renderer, labelSurface);
@@ -297,6 +304,7 @@ int main(int argc, char *argv[])
           (int)(rect.y + (rect.h - labelTextureHeight) * 0.5f),
           labelTextureWidth,
           labelTextureHeight};
+      SDL_RenderFillRectF(renderer, &rect);
       SDL_RenderCopy(renderer, labelTexture, 0, &labelRect);
       SDL_DestroyTexture(labelTexture);
     }
