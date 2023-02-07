@@ -174,6 +174,9 @@ int main(int argc, char *argv[])
 
   for (unsigned long i = 0; i < menu->size; i++)
   {
+    // position each label in a vertical stack centered on the x axis
+    menu->menuItemRects[i * 4 + 0] = (SCREEN_WIDTH - menu->menuItemRects[i * 4 + 2]) * 0.5f;
+    menu->menuItemRects[i * 4 + 1] = i * menu->menuItemRects[i * 4 + 3];
 
     std::cout
         << "[" << i << "] "
