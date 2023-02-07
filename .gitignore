@@ -3,3 +3,5 @@
 bin/
 *.o
 .sconsign.dblite
+!bin/*.ttf
+!bin/*.png
