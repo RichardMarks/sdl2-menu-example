@@ -185,6 +185,7 @@ int main(int argc, char *argv[])
         << std::to_string(menu->menuItemStates[i]) << ")" << std::endl;
   }
 
+  SDL_Color menuItemLabelColor{255, 255, 255, 255};
 
   while (ctx.running)
   {
@@ -206,6 +207,32 @@ int main(int argc, char *argv[])
     }
     SDL_SetRenderDrawColor(renderer, 0x30, 0x60, 0x90, 0xFF);
     SDL_RenderClear(renderer);
+
+    // render the menu
+    for (unsigned long i = 0; i < menu->size; i++)
+    {
+      SDL_Color *labelColor = &menuItemLabelColor;
+      const char *label = (const char *)menu->menuItemLabels[i];
+      SDL_Surface *labelSurface = TTF_RenderUTF8_Blended(font, label, *labelColor);
+      SDL_Texture *labelTexture = SDL_CreateTextureFromSurface(renderer, labelSurface);
+      int labelTextureWidth = labelSurface->w;
+      int labelTextureHeight = labelSurface->h;
+      SDL_FreeSurface(labelSurface);
+      SDL_FRect rect{
+          menu->menuItemRects[i * 4 + 0],
+          menu->menuItemRects[i * 4 + 1],
+          menu->menuItemRects[i * 4 + 2],
+          menu->menuItemRects[i * 4 + 3]};
+
+      SDL_Rect labelRect{
+          (int)(rect.x + (rect.w - labelTextureWidth) * 0.5f),
+          (int)(rect.y + (rect.h - labelTextureHeight) * 0.5f),
+          labelTextureWidth,
+          labelTextureHeight};
+      SDL_RenderCopy(renderer, labelTexture, 0, &labelRect);
+      SDL_DestroyTexture(labelTexture);
+    }
+
     SDL_RenderPresent(renderer);
   }
 
